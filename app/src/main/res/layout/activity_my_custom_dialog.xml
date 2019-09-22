@@ -2,34 +2,47 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linear_layout"
+    android:id="@+id/root_linear_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MyCustomDialog">
+    tools:context=".MyCustomDialog"
+    >
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="169dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tv_client"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Caller info.." />
-
-        </LinearLayout>
-    </ScrollView>
-
-    <Button
-        android:id="@+id/dialog_ok"
+    <LinearLayout
+        android:id="@+id/roots_successor_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@android:string/ok" />
+        android:orientation="vertical"
+        android:duplicateParentState="true">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="169dp"
+            android:duplicateParentState="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:duplicateParentState="true">
+
+                <TextView
+                    android:id="@+id/tv_client"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Caller info.."
+                    android:duplicateParentState="true"/>
+
+            </LinearLayout>
+        </ScrollView>
+
+        <Button
+            android:id="@+id/dialog_ok"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@android:string/ok"
+            android:duplicateParentState="true"/>
+    </LinearLayout>
 
 </LinearLayout>

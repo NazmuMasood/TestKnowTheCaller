@@ -1,10 +1,13 @@
 package com.example.testknowthecaller;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Notification;
+import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +17,8 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -21,6 +26,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -31,15 +37,21 @@ import android.os.Handler;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.testknowthecaller.andreilisun.SwipeDismissDialog;
+
 import java.util.Date;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
+import static android.content.Context.POWER_SERVICE;
 
 //import dootam.dspl.com.lawyercasecall.R;
 
 public class CallReceiver extends PhonecallReceiver
 {
     Context context;
+
+    /*private PowerManager mPowerManager;
+    private PowerManager.WakeLock mWakeLock;*/
 
     @Override
     protected void onIncomingCallStarted(final Context ctx, final String number, Date start)
@@ -48,10 +60,11 @@ public class CallReceiver extends PhonecallReceiver
 
         context =   ctx;
 
-        final Intent intent = new Intent(context, MyCustomDialog.class);
+        final Intent intent = new Intent(context, TestMyCustomDialog.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         intent.putExtra("phone_no",number);
+        intent.putExtra("turnScreenOff", "no");
 
         new Handler().postDelayed(new Runnable()
         {
@@ -59,7 +72,7 @@ public class CallReceiver extends PhonecallReceiver
             public void run()
             {
                 try {
-                    System.out.println("Starting MyCustomDialog");
+                    System.out.println("Starting TestMyCustomDialog");
                     context.startActivity(intent);
 
                     /*----------G A P----------*/
@@ -76,7 +89,10 @@ public class CallReceiver extends PhonecallReceiver
                     alert.show();
                     WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
                     Window window = alert.getWindow();
-                    window.addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+                    window.addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                                   |WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+                                   |WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                    );
                     window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
                     window.setGravity(Gravity.CENTER);
                     lp.copyFrom(window.getAttributes());
@@ -148,5 +164,23 @@ public class CallReceiver extends PhonecallReceiver
     protected void onIncomingCallEnded(Context ctx, String number, Date start, Date end)
     {
         Toast.makeText(ctx,"Bye Bye"+ number,Toast.LENGTH_LONG).show();
+
+//        mWakeLock = mPowerManager.newWakeLock(PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK, "app:screenOff");
+//        mWakeLock.acquire();
+
+//        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+//        PowerManager.WakeLock wakeLock = pm.newWakeLock(
+//                PowerManager.FULL_WAKE_LOCK
+//                | PowerManager.ACQUIRE_CAUSES_WAKEUP
+//                | PowerManager.ON_AFTER_RELEASE, "app:MyWakeLock");
+//        wakeLock.acquire();
+//        wakeLock.release();
+
+//        WindowManager.LayoutParams layoutParam = window.getAttributes();
+//        //oldBrightness = android.provider.Settings.System.getInt(getContentResolver(), android.provider.Settings.System.SCREEN_BRIGHTNESS)/255f;
+//        layoutParam.screenBrightness = 0;
+//        layoutParam.flags |= WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
+//        window.setAttributes(layoutParam);
+        System.exit(0);
     }
 }

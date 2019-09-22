@@ -12,9 +12,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.example.testknowthecaller.andreilisun.SwipeDismissDialog;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,6 +48,29 @@ public class MainActivity extends AppCompatActivity {
 
         //Permission status which shows if permission is granted or not
         permissionStatusTV = findViewById(R.id.permissionStatusTV);
+
+        Button openDialog = findViewById(R.id.openDialog);
+        openDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), TestMyCustomDialog.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                //intent.putExtra("phone_no", "Your friend");
+                //intent.putExtra("turnScreenOff", "no");
+                startActivity(intent);
+
+                //showMyDialog();
+            }
+        });
+    }
+
+    private void showMyDialog(){
+        View dialog = LayoutInflater.from(this).inflate(R.layout.temp_dialog, null);
+        final SwipeDismissDialog swipeDismissDialog = new SwipeDismissDialog.Builder(this)
+                .setView(dialog)
+                .build()
+                .show();
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -74,6 +100,13 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.PROCESS_OUTGOING_CALLS},1);
         }
+        //Checks for permission to acquire wake locks
+        /*if(ContextCompat.checkSelfPermission(this, Manifest.permission.WAKE_LOCK)
+                != PackageManager.PERMISSION_GRANTED){
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WAKE_LOCK},1);
+        }*/
 
         updatePermissionStatus();
     }
